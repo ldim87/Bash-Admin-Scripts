@@ -87,10 +87,10 @@ fi
 >/etc/sysctl.conf cat << EOF 
 
 # Disable syncookies (syncookies are not RFC compliant and can use too muche resources)
-net.ipv4.tcp_syncookies = 0
+net.ipv4.tcp_syncookies = 1
 
 # Basic TCP tuning
-net.ipv4.tcp_keepalive_time = 600
+net.ipv4.tcp_keepalive_time = 60
 net.ipv4.tcp_synack_retries = 3
 net.ipv4.tcp_syn_retries = 3
 
@@ -106,7 +106,7 @@ net.ipv4.conf.all.log_martians = 1
 
 # Minimum interval between garbage collection passes This interval is
 # in effect under high memory pressure on the pool
-net.ipv4.inet_peer_gc_mintime = 5
+# net.ipv4.inet_peer_gc_mintime = 5
 
 # Disable Explicit Congestion Notification in TCP
 net.ipv4.tcp_ecn = 0
