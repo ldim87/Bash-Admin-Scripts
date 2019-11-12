@@ -127,7 +127,7 @@ net.ipv4.tcp_fack = 1
 net.ipv4.tcp_dsack = 0
 
 # Controls IP packet forwarding
-net.ipv4.ip_forward = 0
+net.ipv4.ip_forward = 1
 
 # No controls source route verification (RFC1812)
 net.ipv4.conf.default.rp_filter = 0
@@ -200,26 +200,6 @@ net.ipv4.tcp_congestion_control=${CONGESTION_CONTROL}
 
 EOF
 
-LIMITS_SET=$(grep 'www-data' /etc/security/limits.conf | grep nofile | grep -v '^#')
-if [ "${LIMITS_SET}" ]
- then
-	echo "www-data limits for nofiles already set to"
-	grep 'www-data' /etc/security/limits.conf | grep nofil | grep -v '^#'
- else
-	echo "Setting limits for user www-data in /etc/security/limits.conf"
-	echo "www-data soft nofile 50000" >> /etc/security/limits.conf
-	echo "www-data hard nofile 60000" >> /etc/security/limits.conf
-fi
-
-PAM_SU=$(grep pam_limits.so /etc/pam.d/su | grep -v '^#')
-if [ "${PAM_SU}" ]
- then
-	echo "pam_limits is already set in /etc/pam.d/su"
- else
-	echo "Adding pam limits to /etc/pam.d/su"
-	echo "session    required   pam_limits.so" >> /etc/pam.d/su
-fi
-
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 for LINE in $(grep -v '^#' ${CURRENT_SYSCTL_FILE} | grep . )
@@ -241,4 +221,3 @@ IFS=$SAVEIFS
 
 /sbin/sysctl -p /etc/sysctl.conf
 exit $?
-
